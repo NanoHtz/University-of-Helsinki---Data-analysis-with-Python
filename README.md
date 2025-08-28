@@ -1,2 +1,3 @@
-# Data_Analysis_with_Python_2024-2025-MOOC.fi
- 
+<p align="center">
+  <img src="assets/banner.svg" alt="Banner del proyecto" width="100%" />
+</p>
