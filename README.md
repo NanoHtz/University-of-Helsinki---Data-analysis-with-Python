@@ -33,10 +33,143 @@
   5. Documentar procesos y resultados de forma reproducible en *notebooks*.
 
 ## Explicaciones
-- Tema 1:
-      - Tipos y operaciones básicas.
-      - Cadenas (strings) y módulos.
-      - Secuencias e iterables: Listas, Tuplas, Conjuntos, Diccionarios...
-      - Control de flujo y funciones
-.      - Buenas prácticas.
+
+### Tema 1 — Python (Parte 1)
+
+- **Tipos y operaciones básicas**
+  - Tipos primitivos: `int`, `float`, `bool`, `str`, `None`.
+  - Operadores: aritméticos (`+ - * / // % **`), comparación (`== != < <= > >=`), lógicos (`and or not`).
+  - *Truthiness*: `0`, `0.0`, `''`, `[]`, `{}`, `set()` y `None` son *falsy*.
+  - *Casting* y conversión: `int('3')`, `float('2.5')`, `str(42)`, `bool(x)`.
+  - Ejemplo:
+    ```python
+    x = 5
+    y = 2
+    div = x / y      # 2.5 (float)
+    flo = x // y     # 2   (floor division)
+    mod = x % y      # 1
+    pow_ = x ** y    # 25
+    ```
+
+- **Cadenas (strings) y módulos**
+  - *Slicing*: `s[a:b:c]`, `s[::-1]` invierte.
+  - Métodos útiles: `split`, `join`, `strip`, `replace`, `lower/upper`, `count`, `startswith/endswith`.
+  - *f-strings* para formateo: `f"{nombre}: {valor:.2f}"`.
+  - Import básico:
+    ```python
+    import math as m
+    from random import randint
+    print(m.pi, randint(1, 10))
+    ```
+
+- **Secuencias e iterables: Listas, Tuplas, Conjuntos, Diccionarios…**
+  - **Listas**: mutables; `append`, `extend`, `insert`, `remove`, `pop`, `sort`/`sorted(key=..., reverse=...)`.
+    ```python
+    nums = [3, 1, 2]
+    nums.sort()                 # [1, 2, 3]
+    sorted_nums = sorted(nums, key=lambda x: -x)  # [3, 2, 1]
+    ```
+  - **Tuplas**: inmutables; *unpacking* rápido.
+    ```python
+    a, b = (1, 2)
+    ```
+  - **Conjuntos (set)**: sin duplicados; operaciones de conjuntos.
+    ```python
+    A, B = {1,2,3}, {3,4}
+    A | B, A & B, A - B  # unión, intersección, diferencia
+    ```
+  - **Diccionarios**: pares clave–valor; `.get`, `.items`, *dict comprehensions*.
+    ```python
+    d = {"a": 1, "b": 2}
+    d.get("c", 0)        # 0 por defecto
+    inv = {v: k for k, v in d.items()}
+    ```
+  - **Comprehensions** (lista, set, dict) y generadores:
+    ```python
+    squares = [i*i for i in range(10) if i % 2 == 0]
+    uniques = {c.lower() for c in "AaBb"}
+    mapping = {w: len(w) for w in ["foo", "bar"]}
+    gen = (i*i for i in range(10))  # perezoso
+    ```
+
+- **Control de flujo y funciones**
+  - `if/elif/else`, `for` sobre iterables, `while` cuando importa la condición.
+  - `range(start, stop, step)` para bucles numéricos.
+  - **Funciones**: argumentos por defecto, *docstrings*, retorno claro.
+    ```python
+    def normalize(s: str) -> str:
+        """Limpia espacios múltiples y pasa a minúsculas."""
+        return " ".join(s.split()).lower()
+    ```
+  - Patrón para separar librería de ejecución:
+    ```python
+    def main():
+        ...
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+- **Buenas prácticas**
+  - **No mutar** entradas sin necesidad (trabaja sobre copias o documenta el comportamiento).
+  - Funciones **pequeñas** y **puras** cuando sea posible (mismo input → mismo output, sin efectos laterales).
+  - Nombres explícitos; *docstrings* breves indicando contrato de la función.
+  - Estructura los *notebooks*: objetivo → setup/imports → pasos → resultados → conclusiones.
+  - Añade tests mínimos a utilidades reutilizables (p. ej., en `tests/` con `pytest`).
+
+- **Patrones útiles (Cap. 1)**
+  - **Ordenar por clave**:
+    ```python
+    records = [{"name":"a", "age":30}, {"name":"b", "age":20}]
+    by_age = sorted(records, key=lambda r: r["age"])
+    ```
+  - **Contar frecuencias**:
+    ```python
+    from collections import Counter
+    cnt = Counter(["a","b","a","c","b","a"])
+    cnt.most_common(2)  # [('a', 3), ('b', 2)]
+    ```
+  - **Limpieza básica**:
+    ```python
+    def to_ints(xs):
+        return [int(x.strip()) for x in xs if x.strip().isdigit()]
+    ```
+  - **Detectar consecutivos (runs)** — idea central usada en `detect_ranges`:
+    ```python
+    def detect_ranges(nums):
+        if not nums:
+            return []
+        nums = sorted(nums)
+        out = []
+        start = prev = nums[0]
+        for x in nums[1:]:
+            if x != prev + 1:              # hay salto → cerramos run
+                out.append((start, prev+1) if start != prev else start)
+                start = x
+            prev = x
+        out.append((start, prev+1) if start != prev else start)
+        return out
+
+    # Ejemplo:
+    # detect_ranges([2,5,4,8,12,6,7,10,13]) -> [(2, 3), (4, 8), 10, (12, 14)]
+    ```
+  - **Alternativa con `groupby` (diferencia índice-valor)**:
+    ```python
+    from itertools import groupby
+
+    def runs_by_index(nums):
+        nums = sorted(nums)
+        out = []
+        for _, grp in groupby(enumerate(nums), key=lambda kv: kv[0]-kv[1]):
+            block = [v for _, v in grp]
+            out.append((block[0], block[-1] + 1) if len(block) > 1 else block[0])
+        return out
+    ```
+
+- **Checklist rápida antes de entregar ejercicios**
+  - [ ] La función **devuelve** el resultado (no imprime).
+  - [ ] Entradas no se **mutan** silenciosamente (o se documenta).
+  - [ ] Casos borde: lista vacía, un solo elemento, duplicados, negativos.
+  - [ ] Complejidad razonable (una pasada tras ordenar es suficiente).
+  - [ ] Prueba mínima en `if __name__ == "__main__":` o en `tests/`.
 
