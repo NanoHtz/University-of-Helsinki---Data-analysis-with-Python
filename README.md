@@ -15,6 +15,7 @@
 ## Índice
 - [Resumen](#resumen)
 - [Objetivos y Temario](#objetivos-y-temario)
+- [Explicaciones](#explicaciones)
 
 ---
 
@@ -30,4 +31,12 @@
   3. Crear **visualizaciones** claras con **Matplotlib**.
   4. Aplicar **estadística básica** y modelos introductorios con **scikit-learn**.
   5. Documentar procesos y resultados de forma reproducible en *notebooks*.
+
+## Explicaciones
+- Tema 1:
+      - Tipos y operaciones básicas.
+      - Cadenas (strings) y módulos.
+      - Secuencias e iterables: Listas, Tuplas, Conjuntos, Diccionarios...
+      - Control de flujo y funciones
+.      - Buenas prácticas.
 
