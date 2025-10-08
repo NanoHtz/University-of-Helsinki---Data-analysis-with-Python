@@ -410,3 +410,81 @@
 
 ---
 
+## Capítulo 6
+
+### Tema 6.1 — **Reducción de dimensionalidad**
+- **Motivación**
+  - Quitar redundancia/ruido, acelerar modelos, facilitar visualización y mitigar la maldición de la dimensionalidad.
+- **PCA (Análisis de Componentes Principales)**
+  - Requiere **escalado** previo (`StandardScaler`) para que todas las variables pesen igual.
+  - Elige nº de componentes por **varianza explicada acumulada** (p. ej., `n_components=0.95`).
+  - Interpretación: *loadings* (aportación de cada variable a cada componente).
+- **SVD y PCA incremental**
+  - `TruncatedSVD` para datos *sparse*; `IncrementalPCA` para lotes y datasets grandes.
+- **Proyecciones no lineales (visión)**
+  - t-SNE/UMAP para visualización 2D/3D; no usar como *preprocessing* general de modelos.
+- **Buenas prácticas**
+  - Mantén un pipeline `Scaler → PCA → Modelo`; guarda los **componentes** para trazar *biplots* y analizar.
+
+---
+
+### Tema 6.2 — **Clustering (no supervisado)**
+- **k-means**
+  - Hiperparámetros: `n_clusters`, init `k-means++`, `n_init`.
+  - Elección de *k*: codo (inercia) y **silhouette** (mejor ↑).
+  - Sensible a escala y a formas no esféricas; inicialización afecta estabilidad.
+- **DBSCAN**
+  - Densidad: `eps` (radio) y `min_samples`; detecta *outliers* (label −1).
+  - Ventaja: descubre formas arbitrarias; no requiere *k*.
+- **Clustering jerárquico**
+  - `AgglomerativeClustering` (vinculación completa/promedio/ward).
+  - Dendrograma para inspección de niveles (scipy).
+- **Evaluación**
+  - Internas: **silhouette**, Davies-Bouldin, Calinski-Harabasz.
+  - Externas (si hay etiquetas): ARI/NMI/FMI.
+
+---
+
+### Tema 6.3 — **Selección vs. extracción de *features***
+- **Selección (mantener originales)**
+  - Filtro: `VarianceThreshold`, `SelectKBest` (p-valores/score univariante).
+  - *Wrappers*: RFE/RFECV con un estimador.
+  - Embebida: importancias en árboles/*ensembles* o coeficientes regularizados.
+- **Extracción (crear nuevas)**
+  - PCA/ICA/TruncatedSVD; útiles cuando hay multicolinealidad o ruido.
+- **Consejo**
+  - En pipelines: `ColumnTransformer` para tratar numéricas/categóricas y encadenar selección/extracción.
+
+---
+
+### Tema 6.4 — **Pipelines no supervisados y mixtos**
+- **Encadenar pasos**
+  - Ejemplo: `StandardScaler → PCA → KMeans` (para explorar estructura y luego visualizar).
+  - Supervisado con reducción previa: `Scaler → PCA → LogisticRegression`.
+- **Validación adecuada**
+  - Ajusta PCA/selección **dentro** de CV para evitar *data leakage*.
+  - Reporta varianza explicada y estabilidad de clusters (varias semillas).
+
+---
+
+### Tema 6.5 — **Visualización de alta dimensión**
+- **Matriz de dispersión y proyecciones**
+  - *Scatter matrix* (pares de variables) para ≤10 columnas.
+  - Proyección PCA 2D/3D con colores por cluster/etiqueta; añadir **explicada%** a ejes.
+- **t-SNE/UMAP (exploración)**
+  - t-SNE: sensible a `perplexity` y *learning rate*; no preserva distancias globales.
+  - Usar solo como apoyo visual, no para métricas/entrenamiento final.
+
+---
+
+### Tema 6.6 — **Detección de anomalías (intro)**
+- **Modelos comunes**
+  - `IsolationForest`, `LocalOutlierFactor`, `OneClassSVM`.
+- **Flujo**
+  - Escalado → modelo → marcar *outliers* → revisar manualmente → decidir política (etiquetar, excluir o tratar por separado).
+- **Métricas**
+  - Si hay *ground truth*: *precision/recall* sobre clase minoritaria; si no, inspección dirigida con *scores* y percentiles.
+
+---
+
+
