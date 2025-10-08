@@ -220,3 +220,193 @@
   - `isna`/`notna` para diagnóstico; `fillna` (constante/mediana/moda) y `dropna` según contexto.
   - Evitar sesgos: decidir explícitamente la estrategia por columna.
 
+## Capítulo 4
+
+### Tema 4.1 — Pandas (Parte 2): **GroupBy, pivotes y *reshape***
+- **Agrupar y agregar**
+  - `df.groupby(keys)` seguido de agregaciones (`agg`, `mean`, `sum`, `nunique`, etc.).
+  - Agregaciones múltiples por columna: `agg({'col1': ['mean','std'], 'col2': 'sum'})`.
+  - **`as_index`**: controla si las claves de agrupación pasan a índice.
+- **Transformaciones por grupo**
+  - `transform` (devuelve misma forma que el grupo): z-score por grupo, *fillna* con media del grupo.
+  - `apply` cuando necesitas lógica más libre (ojo a rendimiento).
+- **Tablas dinámicas y reestructuración**
+  - `pivot_table(values, index, columns, aggfunc='mean')` con `margins=True` para totales.
+  - *Reshape*: `melt` (ancho→largo), `pivot` (largo→ancho), `stack/unstack` con MultiIndex.
+- **MultiIndex**
+  - Crear/ordenar niveles: `set_index([...])`, `sort_index(level=...)`, `swaplevel`.
+  - Selección jerárquica: `loc[('A','x')]`, *slicing* por niveles (`IndexSlice`).
+- **Tips**
+  - Nombra columnas tras agregaciones múltiples: `df.columns = ['_'.join(map(str,c)) for c in df.columns]`.
+  - Evita `apply` si es posible con `agg`/`transform` vectorizados.
+
+---
+
+### Tema 4.2 — **Combinación de datasets** (*merge/join/concat*)
+- **Merge/Join (SQL-like)**
+  - `pd.merge(left, right, on='key', how='inner|left|right|outer')`.
+  - Claves con distinto nombre: `left_on='A', right_on='B'`.
+  - *Many-to-one* vs *many-to-many*: comprueba duplicados en claves antes de unir.
+- **Concatenación**
+  - Apilar filas: `pd.concat([df1, df2], axis=0, ignore_index=True)`.
+  - Juntar columnas: `axis=1` (asegura índices alineados o *reset_index* antes).
+- **Uniones especiales**
+  - *Join por índice*: `df1.join(df2, how='left')` (requiere índices significativos).
+  - *As-of merge* (series temporales ordenadas): `pd.merge_asof` con tolerancias.
+- **Validación**
+  - `validate='one_to_one'|'one_to_many'...` en `merge` para detectar duplicidades inesperadas.
+  - Tras el *merge*, cuenta nulos en columnas clave para hallar claves huérfanas.
+
+---
+
+### Tema 4.3 — **Fechas y series temporales**
+- **Tipos de fecha/hora**
+  - Parseo: `pd.to_datetime`, parámetros `format`, `dayfirst`, `utc`.
+  - Accesor `dt`: `dt.year`, `dt.month`, `dt.day_name()`, `dt.tz_convert`.
+- **Índices temporales**
+  - `set_index('fecha')` y `sort_index()` para habilitar *resample* eficiente.
+- **Resample y ventanas**
+  - `resample('D'|'W'|'M').agg(...)` para cambiar frecuencia.
+  - Ventanas móviles: `rolling(window).mean()`, *expanding*, *ewm* (media exponencial).
+- **Operaciones útiles**
+  - Diferencias y *lags*: `diff`, `pct_change`, `shift(periods)`.
+  - Reindex a calendario completo y *forward-fill* de huecos: `reindex(...).ffill()`.
+
+---
+
+### Tema 4.4 — **Limpieza y validación de datos**
+- **Tipos y *casting***
+  - `astype` controlado; numéricos seguros con `pd.to_numeric(errors='coerce')`.
+  - Categorías para cardinalidad alta: `astype('category')` (memoria y velocidad).
+- **Valores faltantes**
+  - Diagnóstico: `isna().mean()` por columna (porcentaje de nulos).
+  - Imputación: `fillna` (constante/media/mediana por grupo con `groupby().transform`).
+  - Decide explícitamente por columna (evita mezclas silenciosas).
+- **Strings y normalización**
+  - Accesor `str`: `strip`, `lower`, `replace`, *regex*, división en columnas.
+  - Estandariza *encodings* y espacios en blanco antes de agrupar/unir.
+- **Outliers (detección básica)**
+  - IQR: *fences* Q1−1.5·IQR / Q3+1.5·IQR; Z-score simple.
+  - Etiqueta y reporta más que eliminar sin justificación.
+- **Validación y *asserts***
+  - `df.eval` + `df.query` para reglas; `assert df['id'].is_unique`.
+  - Comprobaciones de rango, dominios categóricos y sin nulos en claves.
+
+---
+
+### Tema 4.5 — **Estadística descriptiva y muestreo**
+- **Descriptivos**
+  - `describe(include='all')`, `quantile([.1,.5,.9])`, `value_counts(normalize=True)`.
+  - Correlación/covarianza: `corr`, `cov` (ojo a nulos y escalas).
+- **Muestreo reproducible**
+  - `df.sample(n|frac, random_state=42)`. Estratificado: `df.groupby('estrato').apply(lambda g: g.sample(frac=...))`.
+- **Estandarización y *scaling***
+  - *Z-score* manual por columnas, o `sklearn.preprocessing.StandardScaler` si procede.
+- **Bootstrap (idea)**
+  - Re-muestrear con reemplazo para estimar incertidumbre de medias/medianas.
+
+---
+
+### Tema 4.6 — **Visualización aplicada (Matplotlib avanzado)**
+- **Composición**
+  - `subplots` con *shared axes*, *insets* y `twinx` para magnitudes distintas.
+  - *Layouts*: `constrained_layout=True` o `tight_layout()`.
+- **Gráficos útiles para EDA**
+  - Histogramas con *bins* adecuados; *ECDF* (curva acumulada simple); *heatmaps* con `imshow`/`pcolormesh`.
+  - Mapas de *missingness* sencillos: `imshow(df.isna(), aspect='auto')` (+ *colorbar*).
+- **Anotación y exportación**
+  - `annotate` para outliers/puntos clave; controla `zorder` para capas.
+  - Exporta con `dpi` alto y `bbox_inches='tight'`; fija límites/etiquetas legibles.
+
+---
+
+### Tema 4.7 — **Buenas prácticas del capítulo**
+- Define un **contrato de datos** (tipos, dominios, claves) y valida antes de analizar.
+- Evita *`apply` fila a fila* en el *hot path*; prefiere `vectorización/agg/transform`.
+- Tras un `merge`, **audita nulos y duplicados**; guarda *checks* como celdas/funciones reutilizables.
+- Documenta decisiones de limpieza e imputación (por columna) y conserva un **diccionario de datos**.
+- Versiona datos intermedios (parquet) y fija `random_state` para reproducibilidad.
+
+## Capítulo 5
+
+### Tema 5.1 — **Introducción a *scikit-learn* y flujo de trabajo de ML**
+- **Patrón básico**: `fit(X_train, y_train) → predict(X_test)`; estimadores y *transformers*.
+- **Partición de datos**: `train_test_split(test_size=..., stratify=y, random_state=42)`.
+- **Preprocesado**:
+  - Escalado: `StandardScaler` / `MinMaxScaler` (imprescindible para modelos basados en distancia/regularización).
+  - Codificación categórica: `OneHotEncoder(handle_unknown='ignore')`.
+  - Imputación: `SimpleImputer(strategy='mean'|'median'|'most_frequent')`.
+- **Pipelines**:
+  - `Pipeline([('prep', preprocessor), ('model', estimator)])` para evitar *data leakage*.
+  - `ColumnTransformer` para aplicar transformaciones por tipo de columna.
+
+---
+
+### Tema 5.2 — **Modelos supervisados (regresión)**
+- **Lineal**: `LinearRegression` (MSE/R²). Supuestos: linealidad, homocedasticidad (diagnosticar con residuales).
+- **Regularizados**:
+  - `Ridge` (L2) y `Lasso` (L1, induce *sparsity*); `ElasticNet` (mix L1/L2).
+  - Selección de α: `RidgeCV`/`LassoCV` o *grid search*.
+- **k-NN Regressor**: sensible a escala; elegir `n_neighbors` por validación.
+- **Árboles y *ensembles***:
+  - `DecisionTreeRegressor` (propenso a *overfitting* sin poda).
+  - `RandomForestRegressor` (robusto, buen *baseline*), `GradientBoostingRegressor`/`XGB` (si se permite).
+
+**Métricas de regresión**: `mean_squared_error`, `mean_absolute_error`, `r2_score`.
+- Reporta siempre un *baseline* (p.ej., media) para contextualizar.
+
+---
+
+### Tema 5.3 — **Modelos supervisados (clasificación)**
+- **Regresión logística**: lineal en *log-odds*; regularización por defecto (`C` inverso de la fuerza).
+- **k-NN Classifier**: requiere escalado; `weights='distance'` como alternativa.
+- **Árboles/RandomForest**: manejan *features* no escaladas; interpretables vía *feature importance*.
+- **SVM (lineal/RBF)**: potente con buenos *features*; sensible a escala y a `C`, `gamma`.
+
+**Métricas de clasificación**:
+- Exactitud (`accuracy`) ≠ suficiente con clases desbalanceadas.
+- `precision`, `recall`, `f1`, *confusion matrix*; `roc_auc_score` (binaria), *PR AUC* si hay desbalance.
+- Curvas ROC/PR: `plot_roc_curve` (o `from sklearn.metrics import RocCurveDisplay`).
+
+---
+
+### Tema 5.4 — **Validación, *cross-validation* e hiperparámetros**
+- **K-Fold / StratifiedKFold**: estratificar en clasificación; fija `random_state`.
+- **Búsquedas**:
+  - `GridSearchCV` (exhaustiva) y `RandomizedSearchCV` (más eficiente).
+  - Evalúa sobre *pipeline completo* para evitar *leakage*.
+- **Learning/Validation Curves**:
+  - *Under/overfitting*: inspecciona `train_score` vs `val_score`.
+  - Ajusta complejidad del modelo (profundidad del árbol, `C`, `n_neighbors`, etc.).
+- **Selección de modelo**: balancea rendimiento, interpretabilidad y coste computacional.
+
+---
+
+### Tema 5.5 — **Ingeniería de *features* y preparación de datos**
+- **Numéricas**: *log-transform*, *binning* (con cuidado), interacciones/polinomios: `PolynomialFeatures`.
+- **Categóricas**: *one-hot*; considera cardinalidad alta (hashing trick si aplica).
+- **Escalado por grupo**: `groupby().transform` en pandas (si ML por grupo no es viable).
+- **Leakage**: TODA transformación aprendida debe estar dentro del `Pipeline`.
+- **Selección de *features***:
+  - Filtros (`SelectKBest`), *wrappers* (RFE), *embeddings* del modelo (importancias).
+
+---
+
+### Tema 5.6 — **Evaluación robusta y *model diagnostics***
+- **Divisiones repetidas**: *repeated CV* para estimar varianza de la métrica.
+- **Intervalos de confianza**: *bootstrap* de métricas (si procede).
+- **Calibración de probabilidades**: `CalibratedClassifierCV` (Platt/Isotonic).
+- **Curvas de aprendizaje**: detecta si necesitas más datos o más capacidad.
+- **Error analysis**: inspecciona falsos positivos/negativos con ejemplos concretos.
+
+---
+
+### Tema 5.7 — **Persistencia, reproducibilidad y despliegue ligero**
+- **Semillas**: fija `numpy.random.default_rng(42)` / `random_state=42`.
+- **Persistencia**: `joblib.dump(model, 'model.joblib')` / `load`.
+- **Versionado**: guarda *artefactos* (modelo, *scaler*, *encoder*) y su *hash* de datos.
+- **Inferencia**: función `predict(df_raw)` que ejecute el *pipeline* end-to-end.
+- **Trazabilidad**: registra *params*, métricas y fecha (CSV/MLflow sencillo).
+
+---
+
