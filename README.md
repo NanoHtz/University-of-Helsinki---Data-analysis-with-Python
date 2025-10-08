@@ -10,78 +10,128 @@
   <img src="https://img.shields.io/github/languages/top/NanoHtz/TODO_REPO?color=70a5fd&label=language&labelColor=1a1b27" alt="Top language">
   <!-- CI opcional (si tienes workflow .github/workflows/build.yml):
   <img src="https://img.shields.io/github/actions/workflow/status/NanoHtz/TODO_REPO/build.yml?label=CI&logo=githubactions&logoColor=white&labelColor=1a1b27">
-  -->
-  <img src="https://img.shields.io/github/license/NanoHtz/TODO_REPO?color=bb9af7&labelColor=1a1b27" alt="License">
-  <!-- PRs welcome:
-  <img src="https://img.shields.io/badge/PRs-welcome-70a5fd?labelColor=1a1b27">
+<!-- ===================== BANNER ===================== -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/NanoHtz/Assets/main/data/banner.svg" alt="Data Analysis with Python banner">
+</p>
+
+<!-- ===================== BADGES ===================== -->
+<p align="center">
+  <img src="https://img.shields.io/github/stars/NanoHtz/Data-Analysis-with-Python-2024-2025?style=social" alt="Stars">
+  <img src="https://img.shields.io/github/last-commit/NanoHtz/Data-Analysis-with-Python-2024-2025?label=last%20commit&color=7aa2f7&labelColor=1a1b27" alt="Last commit">
+  <img src="https://img.shields.io/github/languages/top/NanoHtz/Data-Analysis-with-Python-2024-2025?color=70a5fd&label=language&labelColor=1a1b27" alt="Top language">
+  <img src="https://img.shields.io/github/license/NanoHtz/Data-Analysis-with-Python-2024-2025?color=bb9af7&labelColor=1a1b27" alt="License">
+  <!-- CI opcional
+  <img src="https://img.shields.io/github/actions/workflow/status/NanoHtz/Data-Analysis-with-Python-2024-2025/ci.yml?label=CI&logo=githubactions&logoColor=white&labelColor=1a1b27">
   -->
 </p>
 
-<h1 align="center">TODO_TITULO</h1>
-<p align="center"><i>TODO_TAGLINE — una línea que diga qué hace el proyecto y por qué importa.</i></p>
+<h1 align="center">Data Analysis with Python 2024–2025 — University of Helsinki</h1>
+<p align="center"><i>Notebooks y utilidades que siguen el currículo oficial: NumPy, Pandas, visualización, limpieza de datos y ML básico. Incluye plantillas reutilizables, buenas prácticas y entorno reproducible.</i></p>
 
 ---
 
 ## Índice
 - [Resumen](#resumen)
+- [Objetivos y Temario](#objetivos-y-temario)
 - [Capturas / Demo](#capturas--demo)
 - [Stack / Dependencias](#stack--dependencias)
-- [Estructura](#estructura)
+- [Estructura del repositorio](#estructura-del-repositorio)
 - [Instalación y uso](#instalación-y-uso)
+- [Comandos útiles / Makefile](#comandos-útiles--makefile)
+- [Datos: dónde colocarlos](#datos-dónde-colocarlos)
+- [Calidad de código](#calidad-de-código)
 - [Tests](#tests)
-- [Rendimiento / Complejidad](#rendimiento--complejidad)
+- [Rendimiento / Escalabilidad](#rendimiento--escalabilidad)
 - [Roadmap](#roadmap)
 - [Problemas conocidos](#problemas-conocidos)
+- [FAQ](#faq)
 - [Contribuir](#contribuir)
+- [Estilo de código](#estilo-de-código)
+- [Versionado y changelog](#versionado-y-changelog)
 - [Licencia](#licencia)
 - [Autor](#autor)
+- [Agradecimientos](#agradecimientos)
 
 ---
 
 ## Resumen
-- **Qué**: TODO_descripción_corta (1–2 frases).
-- **Para qué**: valor que aporta (p. ej., “aprendizaje de X”, “utilidad Y”).
-- **Estado**: `alpha` / `estable` / `en progreso`.
-- **Highlights**: 3 bullets de funciones o decisiones técnicas clave.
+- **Qué**: Colección de *notebooks* y scripts que siguen el curso **Data Analysis with Python (2024–2025)** de la Univ. de Helsinki.
+- **Para qué**: Practicar un flujo completo de análisis de datos (ingestión → limpieza → EDA → visualización → modelos intro de *ML*).
+- **Estado**: `en progreso`.
+- **Highlights**:
+  - Plantillas de EDA y *starter notebooks* para empezar rápido con cualquier dataset.
+  - Helpers en `src/` para IO, gráficos y evaluación rápida de modelos.
+  - Entorno reproducible (`requirements.txt`) y atajos con `Makefile`.
+
+---
+
+## Objetivos y Temario
+- **Objetivos**:
+  1. Dominar operaciones fundamentales con **NumPy** y **Pandas**.
+  2. Realizar **EDA** sistemática (tipos, *missing values*, outliers, transformaciones).
+  3. Crear **visualizaciones** claras con **Matplotlib**.
+  4. Aplicar **estadística básica** y modelos introductorios con **scikit-learn**.
+  5. Documentar procesos y resultados de forma reproducible en *notebooks*.
+
+- **Temario (notebooks principales)**:
+  1. `01_numpy_basics.ipynb` — arrays, broadcasting, vectorización.
+  2. `02_pandas_dataframes.ipynb` — series/dataframes, joins, groupby, pivot.
+  3. `03_data_cleaning.ipynb` — *missing*, *duplicates*, *dtypes*, *string ops*.
+  4. `04_visualization_matplotlib.ipynb` — figuras, ejes, layouts, anotaciones.
+  5. `05_statistics_scipy.ipynb` — descriptiva, tests básicos, intervalos.
+  6. `06_ml_intro_sklearn.ipynb` — *train/test split*, métricas, pipelines.
 
 ---
 
 ## Capturas / Demo
-<!-- Deja una o varias imágenes / GIFs; guarda en assets/ -->
 <p align="center">
-  <!-- <img src="assets/demo_1.png" width="85%" alt="Demo"> -->
-  <!-- <img src="assets/demo.gif" width="85%" alt="Animación"> -->
-  <i>Incluye aquí una imagen o GIF corto si aporta valor.</i>
+  <!-- Sube tus imágenes a assets/ -->
+  <!-- <img src="assets/eda_overview.png" width="85%" alt="EDA Overview"> -->
+  <!-- <img src="assets/plots_demo.gif" width="85%" alt="Plots demo"> -->
+  <i>Incluye aquí una captura de un EDA o una galería de gráficos.</i>
 </p>
 
 ---
 
 ## Stack / Dependencias
-<!-- Elige la variante que aplique y elimina la otra -->
-
-<!-- ===== Variante C / 42 ===== -->
-- **Lenguaje**: C (C99/gnu11)
-- **Build**: Makefile (`cc -Wall -Wextra -Werror`)
-- **POSIX**: `unistd.h`, `fcntl.h`, `signal.h`, etc.
-- **Opcional**: MiniLibX / pthreads / readline
-
-<!-- ===== Variante Python / Datos ===== -->
-<!--
 - **Lenguaje**: Python 3.10+
-- **Entorno**: venv / conda
-- **Paquetes**: numpy, pandas, matplotlib, scipy, scikit-learn, jupyter
--->
+- **Entorno**: `venv` (o `conda`)
+- **Paquetes base**:
+  - Núcleo: `numpy`, `pandas`, `matplotlib`, `scipy`, `scikit-learn`
+  - Notebooks: `jupyter`, `ipykernel`
+  - Calidad (opcional): `black`, `flake8`, `isort`, `pytest`
+- **Fichero de requisitos**: `requirements.txt`
+
+> Si usas `conda`, crea un `environment.yml` equivalente.
 
 ---
 
-## Estructura
+## Estructura del repositorio
 ```text
-TODO_REPO/
-├─ src/              # código fuente
-├─ include/          # headers (si C)
-├─ notebooks/        # *.ipynb (si Python)
-├─ tests/            # mains de prueba o pytest
-├─ assets/           # banner.svg, capturas
-├─ Makefile          # si C/42
-├─ requirements.txt  # si Python
+Data-Analysis-with-Python-2024-2025/
+├─ notebooks/
+│  ├─ 01_numpy_basics.ipynb
+│  ├─ 02_pandas_dataframes.ipynb
+│  ├─ 03_data_cleaning.ipynb
+│  ├─ 04_visualization_matplotlib.ipynb
+│  ├─ 05_statistics_scipy.ipynb
+│  ├─ 06_ml_intro_sklearn.ipynb
+│  └─ templates/
+│     ├─ eda_template.ipynb          # plantilla para arrancar un EDA
+│     └─ notebook_starter.ipynb      # esqueleto con celdas comunes
+├─ data/
+│  ├─ raw/                           # datasets originales (no tocar)
+│  └─ processed/                     # datasets transformados/limpios
+├─ src/
+│  ├─ io_utils.py                    # lectura/escritura CSV/JSON/Parquet
+│  ├─ eda.py                         # funciones auxiliares EDA
+│  ├─ viz.py                         # helpers de visualización
+│  └─ ml_utils.py                    # split, métricas, pipelines básicos
+├─ tests/
+│  └─ test_io_utils.py               # ejemplo con pytest
+├─ assets/                           # banner, capturas
+├─ requirements.txt
+├─ Makefile                          # atajos (fmt, lint, test, clean...)
 └─ README.md
+
