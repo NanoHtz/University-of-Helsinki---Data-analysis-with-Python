@@ -153,23 +153,107 @@
     # Ejemplo:
     # detect_ranges([2,5,4,8,12,6,7,10,13]) -> [(2, 3), (4, 8), 10, (12, 14)]
     ```
-  - **Alternativa con `groupby` (diferencia índice-valor)**:
-    ```python
-    from itertools import groupby
+### Tema 2 — Python (Parte 2)
 
-    def runs_by_index(nums):
-        nums = sorted(nums)
-        out = []
-        for _, grp in groupby(enumerate(nums), key=lambda kv: kv[0]-kv[1]):
-            block = [v for _, v in grp]
-            out.append((block[0], block[-1] + 1) if len(block) > 1 else block[0])
-        return out
+- **Funciones y modularidad avanzada**
+  - Parámetros por defecto, *args, **kwargs*, *docstrings* y *type hints*.
+  - Importación y empaquetado: `__init__.py`, módulos reutilizables en `src/`.
+  - Patrón de entrada: `if __name__ == "__main__":` para separar uso de librería vs ejecución.
+
+- **Expresiones lambda y funciones de orden superior**
+  - `map`, `filter`, `sorted(key=...)` y `functools.reduce`.
+  - Ejemplo:
+    ```python
+    words = ["AA", "bbb", "c"]
+    by_len_desc = sorted(words, key=lambda w: (-len(w), w))
     ```
 
-- **Checklist rápida antes de entregar ejercicios**
-  - [ ] La función **devuelve** el resultado (no imprime).
-  - [ ] Entradas no se **mutan** silenciosamente (o se documenta).
-  - [ ] Casos borde: lista vacía, un solo elemento, duplicados, negativos.
-  - [ ] Complejidad razonable (una pasada tras ordenar es suficiente).
-  - [ ] Prueba mínima en `if __name__ == "__main__":` o en `tests/`.
+- **Iterables, iteradores y *comprehensions* “pro”**
+  - *List/set/dict comprehensions* anidadas, generadores perezosos.
+  - `zip`, `enumerate`, *unpacking* y *star expressions*.
+    ```python
+    pairs = [(i, j) for i in range(3) for j in range(i)]
+    idx_vals = list(enumerate(["a","b","c"], start=1))
+    ```
 
+- **Manejo de errores (excepciones)**
+  - `try/except/else/finally`, crear excepciones propias.
+  - Mantener el **contrato** de la función: captura solo lo que entiendas y re-lanza si procede.
+    ```python
+    try:
+        x = int(s)
+    except ValueError as e:
+        raise ValueError(f"Entrada inválida: {s}") from e
+    ```
+
+- **Entrada/Salida (ficheros)**
+  - Lectura/ escritura con *context manager* para evitar fugas: `with open(...) as f:`.
+  - CSV/JSON con módulos estándar cuando no hay pandas.
+    ```python
+    import json
+    with open("data.json") as f:
+        cfg = json.load(f)
+    ```
+
+- **Testing ligero y calidad**
+  - Pruebas mínimas con `pytest`, *asserts* y casos borde.
+  - Formateo/estilo: `black`, `isort`, `flake8`.
+
+- **Patrones útiles**
+  - **Orden estable con múltiples claves**:
+    ```python
+    data = [{"n":"Ana","age":30},{"n":"Ana","age":25},{"n":"Bob","age":25}]
+    data = sorted(data, key=lambda r: (r["n"], r["age"]))
+    ```
+  - **Agrupar sin pandas**:
+    ```python
+    from itertools import groupby
+    data = sorted(data, key=lambda r: r["n"])
+    groups = {k: list(g) for k, g in groupby(data, key=lambda r: r["n"])}
+    ```
+  - **Generador perezoso**:
+    ```python
+    def chunked(seq, n):
+        for i in range(0, len(seq), n):
+            yield seq[i:i+n]
+    ```
+
+---
+
+### Tema 2 — NumPy (Parte 1)
+
+- **ndarray: creación y `dtype`**
+  - `np.array`, `np.arange`, `np.linspace`, `np.zeros/ones/full`, `np.random`.
+  - Control del tipo: `dtype=np.float32` vs `float64` (memoria/precisión).
+    ```python
+    import numpy as np
+    a = np.arange(12, dtype=np.int32).reshape(3,4)
+    ```
+
+- **Forma, *strides* e indexación**
+  - `shape`, `ndim`, `size`, `itemsize`, `strides` (noción).
+  - Indexado básico y avanzado: *slicing*, máscaras booleanas, listas de índices.
+    ```python
+    m = a[:, 1:3]          # slicing por columnas
+    sel = a[a % 2 == 0]    # máscara booleana
+    ```
+
+- **Broadcasting**
+  - Reglas de alineación para operar entre formas distintas (añadir ejes con `None`/`np.newaxis`).
+    ```python
+    x = np.arange(3)        # (3,)
+    y = np.arange(4)[:,None]# (4,1)
+    grid = x + y            # (4,3) por broadcasting
+    ```
+
+- **uFuncs y vectorización**
+  - Operaciones element-wise (`+ - * /`, `np.exp`, `np.sqrt`, etc.) y reducción (`sum`, `mean`, `min/max`) con `axis`.
+    ```python
+    X = np.random.randn(1000, 50)
+    col_means = X.mean(axis=0)
+    row_norms = np.sqrt((X*X).sum(axis=1))
+    ```
+
+- **Selección y asignación condicional (`np.where`)**
+  ```python
+  z = np.where(X > 0, X, 0.0)  # ReLU simple
