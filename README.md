@@ -39,12 +39,6 @@
 ## Resumen
 - **Qué**: Colección de *notebooks* y scripts que siguen el curso **Data Analysis with Python (2024–2025)** de la Univ. de Helsinki.
 - **Para qué**: Practicar un flujo completo de análisis de datos (ingestión → limpieza → EDA → visualización → modelos intro de *ML*).
-- **Estado**: `en progreso`.
-- **Highlights**:
-  - Plantillas de EDA y *starter notebooks* para empezar rápido con cualquier dataset.
-  - Helpers en `src/` para IO, gráficos y evaluación rápida de modelos.
-  - Entorno reproducible (`requirements.txt`) y atajos con `Makefile`.
-
 ---
 
 ## Objetivos y Temario
