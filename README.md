@@ -4,30 +4,11 @@
 </p>
 
 <!-- ===================== BADGES (ajusta/borra los que no apliquen) ===================== -->
-<p align="center">
-  <img src="https://img.shields.io/github/stars/NanoHtz/TODO_REPO?style=social" alt="Stars">
-  <img src="https://img.shields.io/github/last-commit/NanoHtz/TODO_REPO?label=last%20commit&color=7aa2f7&labelColor=1a1b27" alt="Last commit">
-  <img src="https://img.shields.io/github/languages/top/NanoHtz/TODO_REPO?color=70a5fd&label=language&labelColor=1a1b27" alt="Top language">
-  <!-- CI opcional (si tienes workflow .github/workflows/build.yml):
-  <img src="https://img.shields.io/github/actions/workflow/status/NanoHtz/TODO_REPO/build.yml?label=CI&logo=githubactions&logoColor=white&labelColor=1a1b27">
-<!-- ===================== BANNER ===================== -->
-<p align="center">
-  <img src="https://raw.githubusercontent.com/NanoHtz/Assets/main/data/banner.svg" alt="Data Analysis with Python banner">
-</p>
 
-<!-- ===================== BADGES ===================== -->
-<p align="center">
-  <img src="https://img.shields.io/github/stars/NanoHtz/Data-Analysis-with-Python-2024-2025?style=social" alt="Stars">
-  <img src="https://img.shields.io/github/last-commit/NanoHtz/Data-Analysis-with-Python-2024-2025?label=last%20commit&color=7aa2f7&labelColor=1a1b27" alt="Last commit">
-  <img src="https://img.shields.io/github/languages/top/NanoHtz/Data-Analysis-with-Python-2024-2025?color=70a5fd&label=language&labelColor=1a1b27" alt="Top language">
-  <img src="https://img.shields.io/github/license/NanoHtz/Data-Analysis-with-Python-2024-2025?color=bb9af7&labelColor=1a1b27" alt="License">
-  <!-- CI opcional
-  <img src="https://img.shields.io/github/actions/workflow/status/NanoHtz/Data-Analysis-with-Python-2024-2025/ci.yml?label=CI&logo=githubactions&logoColor=white&labelColor=1a1b27">
-  -->
 </p>
 
 <h1 align="center">Data Analysis with Python 2024–2025 — University of Helsinki</h1>
-<p align="center"><i>Notebooks y utilidades que siguen el currículo oficial: NumPy, Pandas, visualización, limpieza de datos y ML básico. Incluye plantillas reutilizables, buenas prácticas y entorno reproducible.</i></p>
+<p align="center"><i>Notebooks y utilidades que siguen el currículo oficial: NumPy, Pandas, visualización, limpieza de datos y ML básico.</i></p>
 
 ---
 
