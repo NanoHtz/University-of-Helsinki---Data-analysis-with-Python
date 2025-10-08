@@ -257,3 +257,19 @@
 - **Selección y asignación condicional (`np.where`)**
   ```python
   z = np.where(X > 0, X, 0.0)  # ReLU simple
+  
+### Tema 3.1 — Procesamiento de imágenes (Image processing)
+
+- **Objetivo**: tratar imágenes como **arreglos NumPy** (matrices de píxeles) para filtrado, máscaras, transformaciones geométricas y mejoras.
+- **Representación**:
+  - Escala de grises: `H x W` (valores 0–255 o 0–1).
+  - Color (RGB): `H x W x 3`.
+  - Conversión de tipos: `img.astype(np.float32) / 255.0` para operaciones numéricas estables.
+- **Operaciones básicas**:
+  ```python
+  import numpy as np
+  # Negativo / contraste lineal
+  inv = 1.0 - img
+  stretched = np.clip((img - img.min()) / (img.max() - img.min()), 0, 1)
+  # Umbral binario
+  mask = (img > 0.5).astype(np.float32)
