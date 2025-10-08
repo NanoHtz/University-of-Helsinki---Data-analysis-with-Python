@@ -487,4 +487,57 @@
 
 ---
 
+## Proyecto: Regresión lineal y logística (resumen del notebook)
+
+> Explicación lista para **copiar y pegar**. Basada en el notebook `project_notebook_regression_analysis.ipynb` (títulos detectados: **Linear regression**, **Even more accurate model**, **Logistic regression**, **Predicting coronary heart disease**). Se identifican **4** figuras/gráficas generadas y uso de `train_test_split` para validar.
+
+---
+
+### 1) Objetivo
+- **Parte 1 — Regresión lineal**: construir un modelo de regresión para predecir una variable continua (sección *Linear regression*), y una versión mejorada (sección *Even more accurate model*).
+- **Parte 2 — Regresión logística**: clasificar la presencia de enfermedad coronaria (sección *Predicting coronary heart disease*) usando un modelo logístico.
+
+---
+
+### 2) Datos
+- Se emplean al menos **dos configuraciones de problema**:
+  1. **Regresión** con variables numéricas (targets continuos).
+  2. **Clasificación binaria** (CHD: 0/1).
+- El notebook utiliza **división entrenamiento/prueba** con `train_test_split` (estrategia estándar para estimar rendimiento fuera de muestra).
+- **Nota**: El cuaderno no imprime explícitamente las rutas de carga (`read_csv`) ni el nombre del dataset; documenta aquí la fuente (archivo/URL) y un breve diccionario de variables cuando lo tengas:
+
+  | Columna | Tipo | Descripción |
+  |---|---|---|
+  | … | … | … |
+
+---
+
+### 3) Metodología
+
+#### 3.1 Regresión lineal
+1. **Preprocesado** (implícito):
+   - Revisión exploratoria y limpieza básica.
+   - Separación `X` (predictores) y `y` (target).
+   - `train_test_split` para crear conjuntos de **entrenamiento** y **prueba**.
+2. **Modelo base**:
+   - Regresión lineal (`LinearRegression`) o equivalente (ajuste por mínimos cuadrados).
+3. **Modelo “más preciso”** (sección *Even more accurate model*):
+   - Ajustes adicionales sobre la especificación (p.ej., selección/transformaciones de *features*, tuning simple o ingeniería adicional).
+4. **Evaluación**:
+   - Métricas típicas: **MAE**, **MSE/RMSE**, **R²** (no aparecen impresas de forma explícita; añade aquí los valores si los calculas en una celda final).
+   - Inspección visual de residuos y relación predicho–real (4 figuras detectadas en total en el notebook).
+
+#### 3.2 Regresión logística (CHD)
+1. **Formulación**:
+   - `y ∈ {0,1}` indica presencia/ausencia de **coronary heart disease**.
+   - Predictores numéricos/categóricos según el dataset.
+2. **Entrenamiento**:
+   - `train_test_split` para evaluación honesta.
+   - Modelo: **Regresión logística** (sigmoide, decisión por umbral 0.5 si no se optimiza).
+3. **Evaluación**:
+   - **Exactitud (accuracy)**, y preferiblemente **precision/recall/F1**, matriz de confusión y **ROC-AUC** en clasificación binaria.
+   - Ajuste de **umbral de decisión** si existe desbalance de clases.
+
+---
+
 
